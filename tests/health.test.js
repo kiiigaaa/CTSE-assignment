@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('../server');  // export your Express app
+const app = require('../src/index');  // export your Express app
 
 describe('GET /health', () => {
   it('should return OK', async () => {
