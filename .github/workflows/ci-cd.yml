@@ -37,5 +37,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKER_REGISTRY_URL }}/auth-service:latest
-            ${{ secrets.DOCKER_REGISTRY_URL }}/auth-service:${{ github.sha }}
+              ${{ secrets.DOCKER_USERNAME }}/auth-service:latest
+              ${{ secrets.DOCKER_USERNAME }}/auth-service:${{ github.sha }}
