@@ -20,15 +20,21 @@ jobs:
       - name: Run tests
         run: npm test
   sonarcloud:
-    name: Run SonarCloud Analysis
+    name: SonarCloud Analysis
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0      # Shallow clones should be disabled for SonarCloud
+          fetch-depth: 0
 
-      - name: Setup Node.js 18
+      - name: Set up Java 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Node.js 18
         uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -36,14 +42,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run SonarCloud Scan
+      - name: Run SonarCloud Scanner
         uses: SonarSource/sonarcloud-github-action@v1
         with:
-          organization: Kishen Ranasinghe         # Replace with your SonarCloud organization
-          projectKey: kiiigaaa_CTSE-assignment   # Replace with your SonarCloud project key
-          projectName: auth-service
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          entryPoint: bash
+          args: |
+            sonar-scanner \
+              -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+              -Dsonar.organization=${{ secrets.SONAR_ORG }} \
+              -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
 
   build-and-push:
     needs: sonarcloud
