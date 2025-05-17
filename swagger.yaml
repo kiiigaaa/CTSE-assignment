@@ -5,7 +5,7 @@ info:
   description: "Authentication & Authorization microservice"
 servers:
   - url: https://auth-app.blueplant-494a2f74.eastus.azurecontainerapps.io/
-    description: Production Azure Container Apps endpoint
+    description: Production Azure Container App endpoint
   - url: http://localhost:5000
     description: Local development server
 components:
