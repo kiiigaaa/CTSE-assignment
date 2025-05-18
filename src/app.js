@@ -19,4 +19,4 @@ app.use('/api/auth', authRoutes);
 // health‑check for Docker & tests
 app.get('/health', (_req, res) => res.send('OK'));
 
-module.exports = app;
+module.exports = app; //
