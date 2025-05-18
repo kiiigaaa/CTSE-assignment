@@ -70,3 +70,30 @@ jobs:
           tags: |
               ${{ secrets.DOCKER_USERNAME }}/auth-service:latest
               ${{ secrets.DOCKER_USERNAME }}/auth-service:${{ github.sha }}
+  
+  deploy-image:
+    name: Push Image into Azure Container Registry
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Log in to Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.ACR_LOGIN_SERVER }}
+          username:     ${{ secrets.ACR_USERNAME }}
+          password:     ${{ secrets.ACR_PASSWORD }}
+
+      - name: Pull image from Docker Hub
+        run: docker pull docker.io/kishen2000/auth-service:latest
+
+      - name: Tag image for ACR
+        run: |
+          docker tag docker.io/kishen2000/auth-service:latest \
+                     ${{ secrets.ACR_LOGIN_SERVER }}/auth-service:latest
+
+      - name: Push tagged image to ACR
+        run: docker push ${{ secrets.ACR_LOGIN_SERVER }}/auth-service:latest
